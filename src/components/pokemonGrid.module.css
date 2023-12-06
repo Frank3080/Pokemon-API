@@ -25,3 +25,7 @@
 .pokemon:hover {
   padding-left: 4px;
 }
+
+input {
+  background-color: var(--input-color);
+}
