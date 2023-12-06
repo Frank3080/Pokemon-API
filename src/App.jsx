@@ -1,12 +1,14 @@
 import { useState, Suspense } from "react";
+import { useLocalStorage } from "usehooks-ts";
 import ErrorBoundary from "./ErrorBoundary";
 import PokemonCard from "./components/PokemonCard";
 import PokemonGrid from "./components/PokemonGrid";
+import Toggle from "./components/Toggle";
 import "./index.css";
 
 function App() {
   const [selectedPokemon, setSelectedPokemon] = useState(null);
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(useLocalStorage("isDark", false));
 
   const url = "https://pokeapi.co/api/v2/pokemon/";
 
@@ -16,8 +18,9 @@ function App() {
     };
   }
   return (
-    <div className="app" data-theme={isDark ? "dark" : "light"}>
-      <ErrorBoundary fallback={<div>Error...</div>}>
+    <ErrorBoundary fallback={<div>Error...</div>}>
+      <div className="app" data-theme={isDark ? "dark" : "light"}>
+        <Toggle isChecked={isDark} handleChange={() => setIsDark(!isDark)} />
         <Suspense fallback={<div>Loading...</div>}>
           <div className="App">
             {selectedPokemon ? (
@@ -34,8 +37,8 @@ function App() {
             )}
           </div>
         </Suspense>
-      </ErrorBoundary>
-    </div>
+      </div>
+    </ErrorBoundary>
   );
 }
 
